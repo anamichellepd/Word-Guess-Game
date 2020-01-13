@@ -50,17 +50,56 @@
 
 //Variables
 
-//Variables for letters
-var char= ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q"
-    ,"r","s","t","u","v","w","x","y","z"];
-var cat= ["c","a","t"];
-var dog=["d","o","g"];
-var elephant=["e","l","e","p","h","a","n","t"];
-var kangaroo=["k","a","n","g","a","r","o","o"];
-var bunny=["b","u","n","n","y"];
-var horse=["h","o","r","s","e"];
-var monkey=["m","o","n","k","e","y"];
-var lion=["l","i","o","n"];
+//Variables for animals
+
+var animals=["cat","dog","elephant","kangaroo","bunny","horse","monkey","lion"];
+var choice = Math.floor(Math.random()*4);
+var answer = animals[choice];
+var myLength = answer.length;
+var display=[myLength];
+var win = myLength;
+var letters = answer.split();
+var attemptsLeft=10;
+var output = "";
+var userLetter="";
+
+
+
+
+var setup = function(){
+for (var i=0; i<answer.length; i++){
+    display[i] = "_";
+    output = output+display[i];
+}
+documet.getElementById("animals").innerHTML = output;
+output ="";
+}
+
+
+for (var c=0; c<answer.length; c++){
+    if (userLetter === letters[c]){
+        display[c] = userLetter.toUpperCase();
+        win++;
+    }
+    output=output=display[c] + " ";
+}
+document.getElementById("animals").innerHTML = output;
+output="";
+attemptsLeft--;
+
+
+
+
+if (win<1){
+    document.getElementById("animals").innerHTML = "you win";
+}
+else if (attemptsLeft<1){
+document.getElementById("animals").innerHTML= "you lose";
+}
+else{
+    document.getElementById("animal")
+}
+
 
 //Variables for win, lose, guesses left and the guess
 var wins = 0;
