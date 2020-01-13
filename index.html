@@ -1,6 +1,6 @@
 <!--PSEUDOCODE: *pick a theme*
 1.I will set the HTML part of the screen, the text "id" that will be on the screen. 
-2.Establish the variables, for the letters, and for the outputs (wins, losses, current word,  number of guesses remaining, letters already used)
+2.Establish the variables, for the letters, answers, and for the outputs (wins, losses, current word,  number of guesses remaining, letters already used)
 3.Add variables to hold HTML places 
 4.Set a function for a random letter
 5.Set the conditionals: 
@@ -37,9 +37,10 @@
 
 <!-- Only HTML part of text on screen -->
     <div>
-        <p id="directions-text">Guess what letter I'm thinking of </p>
+        <p id="directions-text">Press any key to get started! </p>
         <p id="wins-text"></p>
         <p id="losses-text"></p>
+        <p id="current-word"></p>
         <p id="guessesLeft-text"></p>
         <p id="yourGuesses-text"></p>
     </div>
@@ -50,13 +51,21 @@
 //Variables
 
 //Variables for letters
-var computerChoices= ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q"
+var char= ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q"
     ,"r","s","t","u","v","w","x","y","z"];
+var cat= ["c","a","t"];
+var dog=["d","o","g"];
+var elephant=["e","l","e","p","h","a","n","t"];
+var kangaroo=["k","a","n","g","a","r","o","o"];
+var bunny=["b","u","n","n","y"];
+var horse=["h","o","r","s","e"];
+var monkey=["m","o","n","k","e","y"];
+var lion=["l","i","o","n"];
 
 //Variables for win, lose, guesses left and the guess
 var wins = 0;
 var losses = 0;
-var guessesLeft = 10;
+var guessesLeft = 12;
 var yourGuesses = [];
 var computerGuess = myFunction();
 
@@ -67,16 +76,20 @@ var lossesText = document.getElementById("losses-text");
 var leftText = document.getElementById("guessesLeft-text");
 var userChoiceText = document.getElementById("yourGuesses-text");
 
+//function for the random animal to be generated and build the lines for the word to be guessed
+debugger
 function myFunction (){
-    return computerChoices[Math.floor(Math.random() * computerChoices.length)];
+    return animalChoices[Math.floor(Math.random() * animalChoices.length)];
 }
 
 // function that runs when user presses a key
 document.onkeyup = function(event){
     var userGuess = event.key;
 
-  
-if (userGuess===computerGuess){
+//conditionals (see above explained)
+       // I.The letter replaces one of the lines (_) for "current word" slot
+//        // II. The number of guesses remaining REMAINS THE SAME, and the letter is only added to the top part, not the bottom.
+if (userGuess.includes(char)){
     wins++;
     guessesLeft=10;
     computerGuess = myFunction();
@@ -95,9 +108,11 @@ if (guessesLeft===0){
 
 
 
-//Display all the text below the title
+//Display all the text below the title(wins, losses, current word,  number of guesses remaining, letters already used)
 winsText.textContent = "Wins: " + wins;
 lossesText.textContent = "Losses: " + losses;
+"Current Word: ";
+charactersText.textContent= char; //slots (_) or the letters themselves
 leftText.textContent = "Guesses Left: " + guessesLeft;
 userChoiceText.innerHTML = "Your choices so far: " + yourGuesses;
 
