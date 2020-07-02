@@ -1,71 +1,124 @@
-// Array of animals to choose from
-var words = ["cat", "penguin", "monkey", "dolphin"];
+//GLOBAL VARIABLES
 
-// Starting Variables for when you win, current word, guesses left, your guesses
-var wins = 0;
-var guessesLeft = 10;
-var yourGuesses = [];
-var computerGuess = myFunction();
+// Arrays and variables for holding data
+var wordOptions = ["cat", "penguin", "monkey", "dolphin", "elephant", "sloth"];
+var selectedWord = "";
+var lettersinWord = [];
+var numBlanks = 0;
+var blanksAndSuccesses = [];
+var wrongLetters = [];
 
-// Variables to hold references to HTML places
-var directionsText = document.getElementById("directions-text");
-var winsText = document.getElementById("wins-text");
-var currentWordText = document.getElementById("current-word");
-var leftText = document.getElementById("guessesLeft-text");
-var yourGuessesText = document.getElementById("yourGuesses-Text");
+//Game counters
+var winCount = 0;
+var lossCount = 0;
+var guessesLeft = 0;
 
-//Pick a random word
-function myFunction() {
-  var word = words[Math.floor(Math.random() * words.length)];
+// FUNCTIONS
 
+function startGame() {
+  selectedWord = wordOptions[Math.floor(Math.random() * wordOptions.length)];
+  lettersinWord = selectedWord.split("");
+  numBlanks = lettersinWord.length;
 
-//Set up the answer array
-var answerArray = [];
-for (let i = 0; i < word.length; i++) {
-  answerArray[i] = "_";
+  //Reset
+  guessesLeft = 9;
+  wrongLetters = [];
+  blanksAndSuccesses = [];
 
-var remainingLetters = word.length;
+  //Populate blanks and successes with right number of blanks
+  for (let i = 0; i < numBlanks; i++) {
+    blanksAndSuccesses.push("_");
+  }
 
-//THE GAME LOOP BEGINS HERE
-
-//Listen for the user's input
-debugger;
-document.onkeyup = function(event){
-    var userGuess = event.key;
-
-while (remainingLetters > 0) {
-}
-  //Show the player their progress
-  (answerArray.join(" "));
-
-  //Get a guess from the player
-  var guess = console.log(
-    "Guess a letter or click cancel to stop playing."
+  //Change HTML to reflect round conditions
+  document.getElementById("wordToGuess").innerHTML = blanksAndSuccesses.join(
+    " "
   );
-  if (guess === null) {
+  document.getElementById("numGuesses").innerHTML = guessesLeft;
+  document.getElementById("winCounter").innerHTML = winCount;
+  document.getElementById("lossCounter").innerHTML = lossCount;
+  //Testing/debugging
+  console.log(selectedWord);
+  console.log(lettersinWord);
+  console.log(numBlanks);
+  console.log(blanksAndSuccesses);
+}
+function checkLetters(letter) {
+  //Check if letter exists in code at all
 
-    // Exit the game loop
-    //break;
-//   } else if (guess.length !== 1) {
-//     alert("Please enter a single letter.");
-//   } else {
-    // Update the game state with the guess
-    for (var j = 0; j < word.length; j++) {
-      if (word[j] === guess) {
-        answerArray[j] = guess;
-        remainingLetters--;
+  var isLetterInWord = false;
+
+  for (let i = 0; i < numBlanks; i++) {
+    if (selectedWord[i] == letter) {
+      isLetterInWord = true;
+    }
+  }
+
+  //Check whre in the word the letter exists, then populate our blankAndSuccesses array
+  if (isLetterInWord) {
+    for (let i = 0; i < numBlanks; i++) {
+      if (selectedWord[i] == letter) {
+        blanksAndSuccesses[i] = letter;
       }
     }
   }
-  // The end of the game loop
-}
-}
-//sow the answer and congratulate the player
+  //Letter wasn't found in the word
+  else {
+    wrongLetters.push(letter);
+    guessesLeft--;
+  }
+  //Testing and debugging
+  console.log(blanksAndSuccesses);
 }
 
-winsText.textContent = "Wins:" + wins;
-yourGuessesText.innerHTML = "yourGuesses-text" + yourGuesses;
-currentWordText.innerHTML = "Current Word" + ;
+function roundComplete() {
+  console.log(
+    "Win Count: " +
+      winCount +
+      " | Loss Count: " +
+      lossCount +
+      " | Guesses Left: " +
+      guessesLeft
+  );
 
-//console.log(answerArray.join(" "));
-//console.log("Good job! The answer was " + word);
+  //Update the HTML to reflect the most recent count stats
+  document.getElementById("numGuesses").innerHTML = guessesLeft;
+  document.getElementById("wordToGuess").innerHTML = blanksAndSuccesses.join(
+    " "
+  );
+  document.getElementById("wrongGuesses").innerHTML = wrongLetters.join(" ");
+
+  //Check if user won
+  if (lettersinWord.toString() == blanksAndSuccesses.toString()) {
+    winCount++;
+    alert("You Won!");
+    //updateHTML
+    document.getElementById("winCounter").innerHTML = winCount;
+    startGame();
+  }
+  //Check if user lost
+  else if (guessesLeft == 0) {
+    lossCount++;
+    alert("You lost!");
+
+    //Update HTML
+    document.getElementById("lossCounter").innerHTML = lossCount;
+
+    startGame();
+  }
+}
+
+//MAIN PROCESS
+
+//Initiate the code the first time
+startGame();
+
+//Regster keyclicks
+document.onkeyup = function (event) {
+  var letterGuessed = String.fromCharCode(event.keyCode).toLowerCase();
+  checkLetters(letterGuessed);
+  roundComplete();
+
+  //Testing/Debugging
+  console.log(letterGuessed);
+};
